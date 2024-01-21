@@ -1,6 +1,7 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./assets/LandingPage";
 import Login from "./assets/Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import About from "./assets/About";
 
 const App = () => {
   return (
@@ -8,6 +9,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </BrowserRouter>
   );
