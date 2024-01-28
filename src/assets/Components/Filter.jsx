@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 
 const Filter = () => {
@@ -83,4 +84,10 @@ const Filter = () => {
   );
 };
 
+=======
+const Filter = () => {
+  return <div>Filter</div>;
+};
+
+>>>>>>> 9089d38c6dc65bc40ed6c8cc11af87401a98b1c7
 export default Filter;
