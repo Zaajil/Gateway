@@ -56,7 +56,7 @@ const Navbar = () => {
             <li>
               <Link to="/login">
                 <a className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-                  About
+                  Scholarships
                 </a>
               </Link>
             </li>
@@ -66,7 +66,7 @@ const Navbar = () => {
                 href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Services
+                About Us
               </a>
               </Link>
             </li>
@@ -75,16 +75,22 @@ const Navbar = () => {
                 href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Pricing
+                Contact Us
               </a>
             </li>
             <li>
-              <a
+              {/* <a
                 href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Contact
-              </a>
+                Login
+              </a> */}
+              <button className="bg-[#24306E] text-white font-bold py-2 px-4 rounded-full">
+  Login
+</button>
+<button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
+  Sign up
+</button>
             </li>
           </ul>
         </div>

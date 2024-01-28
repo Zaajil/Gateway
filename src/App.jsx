@@ -1,7 +1,7 @@
 import React from 'react'
 import LandingPage from './assets/LandingPage';
-import Login from './assets/Login';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import Login from './assets/Components/Login';
 
 const App = () => {
   return (
