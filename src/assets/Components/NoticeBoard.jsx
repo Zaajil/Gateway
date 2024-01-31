@@ -1,5 +1,3 @@
-import React from "react";
-
 const NoticeBoard = () => {
   return (
     <div className="flex justify-evenly mt-20">
@@ -35,22 +33,22 @@ const NoticeBoard = () => {
           <div className="p-10 scrolling-content">
             <ul className="list-disc">
               <li>
-                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
               <li>
-                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
               <li>
-                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
             </ul>
           </div>
@@ -58,22 +56,22 @@ const NoticeBoard = () => {
           <div className="p-10 scrolling-content">
             <ul className="list-disc">
               <li>
-                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
               <li>
-                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
               <li>
-                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-                pariatur ut dolorem, modi similique, est expedita doloremque,
-                omnis soluta error commodi impedit temporibus? Aperiam, laborum?
-                Quae sit ab aspernatur numquam.
+                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Cumque pariatur ut dolorem, modi similique, est expedita
+                doloremque, omnis soluta error commodi impedit temporibus?
+                Aperiam, laborum? Quae sit ab aspernatur numquam.
               </li>
             </ul>
           </div>
