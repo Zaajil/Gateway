@@ -93,9 +93,11 @@ const Navbar = () => {
                   Login
                 </button>
               </Link>
-              <button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
-                Sign up
-              </button>
+              <Link to="/signup">
+                <button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
+                  Sign up
+                </button>
+              </Link>
             </li>
           </ul>
         </div>

@@ -19,7 +19,7 @@ const Filter = () => {
           <div className="mb-5">
             <label
               htmlFor="class"
-              className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              className="block mb-2 text-sm font-medium text-gray-1200 text-black"
             >
               Your Present Class
             </label>
@@ -40,7 +40,7 @@ const Filter = () => {
           <div className="mb-5">
             <label
               htmlFor="class"
-              className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              className="block mb-2 text-sm font-medium text-gray-1200 text-black"
             >
               Gender
             </label>
@@ -57,7 +57,9 @@ const Filter = () => {
           <div className="mb-5">
             <label
               htmlFor="class"
-              className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              className="block mb-2 text-sm font-medium text-gray-o
+              o
+              00 text-black"
             >
               State of Institute
             </label>
@@ -73,7 +75,7 @@ const Filter = () => {
 
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="flex items-center w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Find Scholarships
           </button>

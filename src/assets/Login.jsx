@@ -84,6 +84,7 @@ const Login = () => {
                         </label>
                       </div>
                     </div>
+                    
                     <a
                       href="#"
                       className="text-sm text-blue-700 hover:underline ml-auto dark:text-blue-1000"

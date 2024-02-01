@@ -4,7 +4,7 @@ import Login from "./assets/Login";
 import About from "./assets/About";
 import Scholarships from "./assets/Scholarships";
 import Contact from "./assets/contact";
-
+import Signup from "./assets/Signup";
 const App = () => {
   return (
     <BrowserRouter>
@@ -14,6 +14,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/scholarships" element={<Scholarships />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/signup" element={<Signup />} />
+
 
       </Routes>
     </BrowserRouter>
