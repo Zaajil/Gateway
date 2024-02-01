@@ -17,12 +17,15 @@ const Login = () => {
             >
               Gateway to Scholarship
             </a>
+
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  dark:border-gray-700">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-black text-center">
                   Sign in to your account
                 </h1>
+
                 <form className="space-y-4 md:space-y-6" action="#">
+
                   <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" action="#" method="POST">
                       <div>
@@ -40,7 +43,7 @@ const Login = () => {
                             autoComplete="email"
                             placeholder="  name@gmail.com"
                             required
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           />
                         </div>
                       </div>
@@ -60,7 +63,7 @@ const Login = () => {
                       id="password"
                       placeholder="  ••••••••"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
 
@@ -84,7 +87,7 @@ const Login = () => {
                         </label>
                       </div>
                     </div>
-                    
+
                     <a
                       href="#"
                       className="text-sm text-blue-700 hover:underline ml-auto dark:text-blue-1000"
@@ -93,10 +96,24 @@ const Login = () => {
                     </a>
                   </div>
 
+                  <div className="flex items-center justify-between mt-4">
+                    {/* Add Sign In */}
+                    <button
+                      type="submit"
+                      className="flex items-center justify-center  w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                      Sign in
+                    </button>
+                  </div>
+
+                  <div className="relative flex items-center justify-center w-full mt-6 border border-t">
+                    <div className="absolute px-5 bg-white">Or</div>
+                  </div>
+
                   <div className="flex items-center justify-center mt-4">
                     <button
                       type="button"
-                      className="flex items-center justify-center w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                      className="flex items-center justify-center w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -112,26 +129,14 @@ const Login = () => {
                     </button>
                   </div>
 
-                  <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-                    <div className="absolute px-5 bg-white">Or</div>
-                  </div>
 
-                  <div className="flex items-center justify-between mt-4">
-                    {/* Add Sign In */}
-                    <button
-                      type="submit"
-                      className="flex items-center justify-center  w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    >
-                      Sign in
-                    </button>
-                  </div>
 
                   <div className="flex items-center justify-center  w-full">
                     <p className="text-sm  text-black">
                       Don't have an account yet?{" "}
                       <a
                         href="#"
-                        className="font-medium text-blue-1000 hover:underline dark:text-blue-500"
+                        className="font-medium text-blue-700 hover:underline dark:text-blue-500"
                       >
                         Sign up
                       </a>
