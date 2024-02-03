@@ -41,7 +41,6 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label
                     htmlFor="number"
@@ -60,7 +59,6 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label
                     htmlFor="email"
@@ -80,7 +78,6 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label
                     htmlFor="password"
@@ -97,7 +94,6 @@ const Signup = () => {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
-
                 <div>
                   <label
                     htmlFor="confirmPassword"
@@ -114,7 +110,6 @@ const Signup = () => {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
-
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -137,13 +132,35 @@ const Signup = () => {
                     </label>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between mt-4">
                   <button
                     type="submit"
                     className="flex items-center justify-center w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
                     Sign up
+                  </button>
+                </div>{" "}
+               
+                <div className="relative flex items-center justify-center w-full mt-6 border border-t">
+                  <div className="absolute px-5 bg-white">Or</div>
+                </div>
+                
+                <div className="flex items-center justify-center mt-4">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-google mr-2"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
+                    </svg>
+                    Sign in with Google
                   </button>
                 </div>
 
