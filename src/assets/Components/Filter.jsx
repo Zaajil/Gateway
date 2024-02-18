@@ -1,12 +1,14 @@
 const Filter = () => {
   return (
     <div className="flex justify-evenly">
-      <img src="bgimage.png" alt="" className="w-[472px] object-cover rounded-[20px]" />
+      <img
+        src="bgimage.png"
+        alt=""
+        className="w-[472px] object-cover rounded-[20px]"
+      />
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-[44px] pt-83">
-            Find scholarships
-          </h1>
+          <h1 className="text-[44px] pt-83">Find scholarships</h1>
           <p className="pl-5 w-3/5 text-pretty">
             Get a collections of suitable scholarships from our expansive
             scholarship database.
@@ -16,8 +18,13 @@ const Filter = () => {
         <form className="max-w-sm mx-auto mt-10">
           <div className="mb-5">
             <label
+<<<<<<< HEAD
                htmlFor="className"
               className="block mb-2 text-sm font-medium text-gray-900 text-black"
+=======
+              htmlFor="class"
+              className="block mb-2 text-sm font-medium text-gray-1200 text-black"
+>>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
             >
               Your Present Class
             </label>
@@ -37,8 +44,13 @@ const Filter = () => {
           </div>
           <div className="mb-5">
             <label
+<<<<<<< HEAD
                htmlFor="class"
               className="block mb-2 text-sm font-medium text-gray-900 text-black"
+=======
+              htmlFor="class"
+              className="block mb-2 text-sm font-medium text-gray-1200 text-black"
+>>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
             >
               Gender
             </label>
@@ -53,9 +65,17 @@ const Filter = () => {
             </select>
           </div>
           <div className="mb-5">
+<<<<<<< HEAD
           <label
                htmlFor="class"
               className="block mb-2 text-sm font-medium text-gray-900 text-black"
+=======
+            <label
+              htmlFor="class"
+              className="block mb-2 text-sm font-medium text-gray-o
+              o
+              00 text-black"
+>>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
             >
               State of Institute
             </label>
@@ -68,10 +88,10 @@ const Filter = () => {
               <option value="">Outside Kerala</option>
             </select>
           </div>
-          
+
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="flex items-center w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Find Scholarships
           </button>
@@ -80,4 +100,8 @@ const Filter = () => {
     </div>
   );
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
 export default Filter;
