@@ -34,9 +34,9 @@ const Navbar = () => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M1 1h15M1 7h15M1 13h15"
             />
           </svg>
@@ -53,7 +53,7 @@ const Navbar = () => {
               </a>
             </li>
             <li>
-              <Link to="/login">
+              <Link to="/scholarship">
                 <a className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                   Scholarships
                 </a>
@@ -61,12 +61,12 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/login">
-              <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Services
-              </a>
+                <a
+                  href="#"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Services
+                </a>
               </Link>
             </li>
             <li>
@@ -84,12 +84,14 @@ const Navbar = () => {
               >
                 Login
               </a> */}
-              <button className="bg-[#24306E] text-white font-bold py-2 px-4 rounded-full">
-  Login
-</button>
-<button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
-  Sign up
-</button>
+              <Link to='/login'>
+                <button className="bg-[#24306E] text-white font-bold py-2 px-4 rounded-full">
+                  Login
+                </button>
+              </Link>
+              <button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
+                Sign up
+              </button>
             </li>
           </ul>
         </div>
