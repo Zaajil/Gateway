@@ -4,11 +4,11 @@ import { useFavouriteScholarships } from "./FavouriteScholarshipContext";
 
 const SCard = (props) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const { toggleFavorite } = useFavouriteScholarships();
+  const { toggleFavorite } = useFavouriteScholarships() || {};
 
   const handleToggleFavorite = () => {
     setIsFavorite(!isFavorite);
-    toggleFavorite(props);
+    toggleFavorite && toggleFavorite(props);
   };
 
   return (

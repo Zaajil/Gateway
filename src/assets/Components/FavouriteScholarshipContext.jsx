@@ -1,4 +1,3 @@
-// FavouriteScholarshipContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const FavouriteScholarshipContext = createContext();
@@ -12,8 +11,9 @@ export const FavouriteScholarshipProvider = ({ children }) => {
   useEffect(() => {
     console.log("Favourite Scholarships updated:", favouriteScholarships);
   }, [favouriteScholarships]);
-
+  console.log("Number of favorite scholarships:", favouriteScholarships.length);
   const toggleFavorite = (scholarship) => {
+    console.log("Toggle Favorite:", scholarship);
     const index = favouriteScholarships.findIndex(
       (s) => s.name === scholarship.name
     );

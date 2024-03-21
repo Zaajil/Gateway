@@ -1,11 +1,11 @@
-// FavouriteScholarship.jsx
 import React from "react";
 import { useFavouriteScholarships } from "./FavouriteScholarshipContext";
 import SCard from "./SCard";
 
-const FavouriteScholarship = () => {
+const FavoritePage = () => {
   const { favouriteScholarships } = useFavouriteScholarships();
 
+  console.log("Favourite Scholarships length:", favouriteScholarships.length);
   console.log("Favourite Scholarships:", favouriteScholarships);
 
   return (
@@ -15,7 +15,7 @@ const FavouriteScholarship = () => {
         <div className="flex flex-wrap">
           {favouriteScholarships.map((scholarship) => (
             <SCard
-              key={scholarship.id}
+              key={scholarship.id} // Assuming scholarship has an id
               name={scholarship.name}
               lastDate={scholarship.lastDate}
               amount={scholarship.amount}
@@ -30,4 +30,4 @@ const FavouriteScholarship = () => {
   );
 };
 
-export default FavouriteScholarship;
+export default FavoritePage;
