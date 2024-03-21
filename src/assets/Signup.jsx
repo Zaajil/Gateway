@@ -1,187 +1,252 @@
-const Signup = () => {
+import { useState, useEffect, useRef } from "react";
+import { auth, firestore  } from "../firebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import Login from './Login';
+
+
+const SignUp = ({ closeModal }) => {
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const modalRef = useRef();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [closeModal]);
+
+  const signUpWithEmailPassword = async (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const name = event.target.name.value;
+    const phoneNumber = event.target.phoneNumber.value;
+    const confirmPassword = event.target.confirmPassword.value;
+
+    if (password.length < 6) {
+      setErrorMessage("Password should be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      await setDoc(doc(firestore , "users", user.uid), {
+        name,
+        email,
+        phoneNumber,
+      });
+
+      setSignUpSuccess(true); // Set signUpSuccess to true upon successful sign-up
+      setErrorMessage(""); // Clear error message upon successful sign-up
+    } catch (error) {
+      setErrorMessage("Failed to sign up. Please try again.");
+      console.error("Sign-up with email/password error:", error);
+    }
+  };
+
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        console.log("User signed in with Google:", user);
+        setTimeout(() => {
+          navigate("/scholarship");
+        }, 2000);
+      })
+      .catch((error) => {
+        setErrorMessage("Failed to sign in with Google. Please try again.");
+        console.error("Sign-in with Google error:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (signUpSuccess) {
+      navigate("/login");
+    }
+  }, [signUpSuccess, navigate]);
+
   return (
-    <div>
-      <section className="bg-white dark:bg-white-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <img
-            className="w-8 h-8 mr-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-
-          <a
-            href="#"
-            className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black"
+    <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div
+        ref={modalRef}
+        className="relative bg-white rounded-lg shadow-lg p-8 max-w-md w-full"
+      >
+        <button
+          onClick={closeModal}
+          className="absolute top-0 right-0 m-4 text-gray-400 hover:text-gray-500 focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            Gateway to Scholarship
-          </a>
-
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-black md:text-2xl dark:text-black text-center">
-                Sign up for an account
-              </h1>
-
-              <form className="space-y-4 md:space-y-6" action="#" method="POST">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Name
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      placeholder="Your Full Name"
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="number"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Phone Number
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="number"
-                      name="number"
-                      type="tel"
-                      placeholder="Your Phone Number"
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    Email address
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder="Your Email Address"
-                      required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-black"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="  ••••••••"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-black"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    placeholder="  ••••••••"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 bg-gray-300 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="bg-gray-50 border border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                      required
-                    />
-                  </div>
-                  <div className="text-sm ml-3">
-                    <label
-                      htmlFor="remember"
-                      className="font-medium text-black "
-                    >
-                      I accept all{" "}
-                      <span className="text-blue-700">
-                        terms and conditions
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-4">
-                  <button
-                    type="submit"
-                    className="flex items-center justify-center w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    Sign up
-                  </button>
-                </div>{" "}
-               
-                <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-                  <div className="absolute px-5 bg-white">Or</div>
-                </div>
-                
-                <div className="flex items-center justify-center mt-4">
-                  <button
-                    type="button"
-                    className="flex items-center justify-center w-full text-white bg-indigo-900 hover:bg-indigo-1000 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-google mr-2"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
-                    </svg>
-                    Sign in with Google
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-center w-full">
-                  <p className="text-sm text-black">
-                    Already have an account?{" "}
-                    <a
-                      href="#"
-                      className="font-medium text-blue-700 hover:underline dark:text-blue-500"
-                    >
-                      Sign in
-                    </a>
-                  </p>
-                </div>
-              </form>
-            </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <h2 className="text-3xl font-bold text-[#002D74] mb-6 text-center">
+          Sign Up
+        </h2>
+        {/* Display success message if sign-up is successful */}
+        {signUpSuccess && (
+          <div className="flex items-center mb-4 text-green-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm4.707-11.293a1 1 0 10-1.414-1.414l-5 5a1 1 0 000 1.414l3.5 3.5a1 1 0 001.414 0l7-7a1 1 0 10-1.414-1.414l-6.293 6.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Signed up successfully! Please login.
           </div>
+        )}
+        {/* Display error message if there is an error */}
+        {errorMessage && (
+          <div className="text-red-500 mb-4">{errorMessage}</div>
+        )}
+        <form onSubmit={signUpWithEmailPassword} className="space-y-4">
+          {/* Input fields */}
+          <div>
+            <label htmlFor="name" className="block text-[#002D74]">
+              Name
+            </label>
+            <input
+              className="block w-full border border-gray-300 rounded-md px-4 py-2"
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-[#002D74]">
+              Email
+            </label>
+            <input
+              className="block w-full border border-gray-300 rounded-md px-4 py-2"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div>
+            <label htmlFor="phoneNumber" className="block text-[#002D74]">
+              Phone Number
+            </label>
+            <input
+              className="block w-full border border-gray-300 rounded-md px-4 py-2"
+              type="tel"
+              name="phoneNumber"
+              id="phoneNumber"
+              placeholder="Enter your phone number"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-[#002D74]">
+              Password
+            </label>
+            <input
+              className="block w-full border border-gray-300 rounded-md px-4 py-2"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+            />
+          </div>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-[#002D74]">
+              Confirm Password
+            </label>
+            <input
+              className="block w-full border border-gray-300 rounded-md px-4 py-2"
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+            />
+          </div>
+          <button
+            className="w-full bg-[#002D74] text-white py-2 rounded-md hover:bg-[#206ab1] transition duration-300"
+            type="submit"
+          >
+            Sign Up
+          </button>
+        </form>
+        {/* "Sign in with Google" option */}
+        <div className="mt-4 flex items-center justify-center">
+          <button
+            className="w-full bg-white border border-gray-300 text-[#002D74] py-2 rounded-md mt-6 hover:bg-gray-100 transition duration-300 flex items-center justify-center"
+            onClick={signInWithGoogle}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48 48"
+              width="25px"
+              className="mr-2"
+            >
+              <path
+                fill="#FFC107"
+                d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+              ></path>
+              <path
+                fill="#FF3D00"
+                d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+              ></path>
+              <path
+                fill="#4CAF50"
+                d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+              ></path>
+              <path
+                fill="#1976D2"
+                d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+              ></path>
+            </svg>
+            Sign in with Google
+          </button>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
 
-export default Signup;
+export default SignUp;

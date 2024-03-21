@@ -1,6 +1,6 @@
 const NoticeBoard = () => {
   return (
-    <div className="flex justify-evenly mt-20">
+    <div className="flex justify-evenly mt-20 relative z-[-10]">
       <style>
         {`
           .scrolling-container {

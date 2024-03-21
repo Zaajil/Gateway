@@ -1,6 +1,37 @@
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Login from "../../assets/Login"; // Import the Login component
+import SignUp from "../../assets/Signup"; // Import the SignUp component
 
 const Navbar = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+
+  const toggleLogin = () => {
+    setIsLoginOpen(!isLoginOpen);
+  };
+
+  const toggleSignUp = () => {
+    setIsSignUpOpen(!isSignUpOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        (isLoginOpen || isSignUpOpen) &&
+        !event.target.closest(".modal-content")
+      ) {
+        setIsLoginOpen(false);
+        setIsSignUpOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLoginOpen, isSignUpOpen]);
+
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -9,11 +40,11 @@ const Navbar = () => {
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8"
+            src="gws icon p.png"
+            className="h-8 rounded-md"
             alt="Flowbite Logo"
           />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-2xl  font-semibold whitespace-nowrap dark:text-white">
             Gateway To Scholarships
           </span>
         </a>
@@ -55,31 +86,19 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-<<<<<<< HEAD
               <Link to="/scholarship">
-=======
-              <Link to="/scholarships">
->>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
                 <a className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                   Scholarships
                 </a>
               </Link>
             </li>
             <li>
-<<<<<<< HEAD
-              <Link to="/login">
-=======
               <Link to="/about">
->>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
                 <a
                   href="#"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-<<<<<<< HEAD
-                  Services
-=======
-                  About Us
->>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
+                  About
                 </a>
               </Link>
             </li>
@@ -94,36 +113,39 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              {/* <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              <button
+                onClick={toggleLogin}
+                className="ml-3 bg-[#24306E] text-white font-bold py-2 px-4 rounded-full"
               >
                 Login
-              </a> */}
-<<<<<<< HEAD
-              <Link to='/login'>
-=======
-              <Link to="/login">
->>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
-                <button className="bg-[#24306E] text-white font-bold py-2 px-4 rounded-full">
-                  Login
-                </button>
-              </Link>
-<<<<<<< HEAD
-              <button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={toggleSignUp}
+                className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full"
+              >
                 Sign up
               </button>
-=======
-              <Link to="/signup">
-                <button className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full">
-                  Sign up
-                </button>
-              </Link>
->>>>>>> f18fdc0d33f484689bda3aef4fdbcb1c25cd9948
             </li>
           </ul>
         </div>
       </div>
+      {/* Render Login or SignUp component as a popup modal */}
+      {(isLoginOpen || isSignUpOpen) && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full modal-content relative">
+            <button
+              onClick={isLoginOpen ? toggleLogin : toggleSignUp}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+            >
+              X
+            </button>
+            {isLoginOpen && <Login closeModal={toggleLogin} />}
+            {isSignUpOpen && <SignUp closeModal={toggleSignUp} />}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
