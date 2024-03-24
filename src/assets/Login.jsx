@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate hooks
 import {
   getAuth,
@@ -6,14 +6,18 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firebaseApp } from "../firebaseConfig";
-import Profile from "./Components/Profile";
+import { auth, firestore } from "../firebaseConfig";
+import PropTypes from "prop-types";
 
 const Login = ({ closeModal }) => {
   const [SignInSuccess, setSignInSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const modalRef = useRef();
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
@@ -31,20 +35,61 @@ const Login = ({ closeModal }) => {
   }, [closeModal]);
 
   const signInWithGoogle = () => {
-    const auth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
-        const userNameFromEmail = extractUserNameFromEmail(user.email);
-        setUserName(userNameFromEmail);
         console.log("User signed in with Google:", user);
-        setSignInSuccess(true);
-        navigate("/profile", { state: { userName: userNameFromEmail } });
+        console.log("User email:", user.email);
+
+        try {
+          // Check if the user already exists in Firestore
+          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          let nameFromFirestore = ""; // Variable to store the name from Firestore
+          let emailFromFirestore = "";
+          let roleFromFirestore = "";
+          if (userDoc.exists()) {
+            // If user exists in Firestore, retrieve the name from there
+            nameFromFirestore = userDoc.data().name;
+            emailFromFirestore = userDoc.data().email;
+            roleFromFirestore = userDoc.data().role;
+          } else {
+            // If user doesn't exist in Firestore, extract name from email
+            nameFromFirestore = user.email.split("@")[0];
+
+            // Save user data to Firestore only if the user doesn't exist
+            await setDoc(doc(firestore, "users", user.uid), {
+              name: nameFromFirestore,
+              email: user.email,
+            });
+          }
+
+          if (roleFromFirestore === "admin") {
+            setIsAdmin(true);
+            setSignInSuccess(true); // Set SignInSuccess to true for both admin and non-admin users
+            setUserName(nameFromFirestore);
+            setUserEmail(user.email);
+  // Redirect to the admin dashboard if the user is an admin
+            navigate("/admin", {state: { userName: nameFromFirestore, userEmail: user.email,}});
+          } else {
+            // Set the username obtained from Firestore or extracted from email
+            setUserName(nameFromFirestore);
+            setUserEmail(user.email);
+            setSignInSuccess(true);
+            setTimeout(() => {
+              navigate("/profile", {
+                state: { userName: nameFromFirestore, userEmail: user.email },
+              });
+            }, 2000);
+          }
+        } catch (error) {
+          console.error("Error handling sign-in with Google:", error);
+          setErrorMessage("Failed to sign in with Google. Please try again.");
+        }
       })
       .catch((error) => {
+        setErrorMessage("Failed to sign in with Google. Please try again.");
         console.error("Sign-in with Google error:", error);
-        setErrorMessage("Failed to sign in with Google.");
       });
   };
 
@@ -53,37 +98,83 @@ const Login = ({ closeModal }) => {
     const auth = getAuth(firebaseApp);
     const email = event.target.email.value;
     const password = event.target.password.value;
+
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
-        const userNameFromEmail = extractUserNameFromEmail(user.email);
-        setUserName(userNameFromEmail);
-        console.log("User signed in with email/password:", user);
-        if (email === "admin@example.com" && password === "admin123") {
-          // If admin credentials, navigate to Admin component
-          navigate("/admin");
-        } else {
-          // If regular user, navigate to Profile component
-          setSignInSuccess(true);
-          navigate("/profile", { state: { userName: userNameFromEmail } });
+
+        try {
+          // Check if the user already exists in Firestore
+          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          let nameFromFirestore = ""; // Variable to store the name from Firestore
+          let emailFromFirestore = "";
+          let roleFromFirestore = "";
+
+          if (userDoc.exists()) {
+            // If user exists in Firestore, retrieve the data from there
+            const userData = userDoc.data();
+            nameFromFirestore = userData.name;
+            emailFromFirestore = userData.email;
+            roleFromFirestore = userData.role;
+          } else {
+            console.error("User data not found in Firestore.");
+            // Handle the case when user data is not found
+          }
+
+          if (roleFromFirestore === "admin") {
+            setSignInSuccess(true);
+            setIsAdmin(true);
+            setUserName(nameFromFirestore);
+            setUserEmail(emailFromFirestore);
+            // Redirect to the admin dashboard if the user is an admin
+            navigate("/admin", {
+              state: {
+                userName: nameFromFirestore,
+                userEmail: emailFromFirestore,
+              },
+            });
+          } else {
+            // Redirect to the profile page for non-admin users
+            setUserName(nameFromFirestore);
+            setSignInSuccess(true);
+            setTimeout(() => {
+              navigate("/profile", {
+                state: {
+                  userName: nameFromFirestore,
+                  userEmail: emailFromFirestore,
+                },
+              });
+            }, 2000);
+          }
+        } catch (error) {
+          console.error("Error retrieving user data from Firestore:", error);
+          // Handle the error
         }
+        console.log("User signed in with email/password:", user);
       })
       .catch((error) => {
         console.error("Sign-in with email/password error:", error);
         setErrorMessage("Invalid email or password.");
       });
   };
-  const extractUserNameFromEmail = (email) => {
-    const [userName] = email.split("@");
-    return userName;
+
+  const getUserData = async (uid) => {
+    try {
+      const userDoc = await getDoc(doc(firestore, "users", uid));
+      if (userDoc.exists()) {
+        return userDoc.data(); // Return user data if document exists
+      } else {
+        console.error("User document does not exist.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error retrieving user data from Firestore:", error);
+      throw error;
+    }
   };
+  console.log(SignInSuccess);
 
-  console.log("SignInSuccess:", SignInSuccess); // Log SignUpSuccess
-  console.log("UserName:", userName); // Log U
-
-  return SignInSuccess ? (
-    <Profile userName={userName} />
-  ) : (
+  return (
     <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div
         ref={modalRef}
@@ -114,7 +205,7 @@ const Login = ({ closeModal }) => {
         {errorMessage && (
           <p className="text-red-500 text-center mb-4">{errorMessage}</p>
         )}
-        {SignInSuccess && (
+        {SignInSuccess &&(
           <p className="text-green-500 text-center mb-4">
             Successfully logged in!
           </p>
@@ -187,7 +278,7 @@ const Login = ({ closeModal }) => {
         </button>
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <Link to="/signup" className="text-[#002D74]">
               Sign up
             </Link>
@@ -202,6 +293,9 @@ const Login = ({ closeModal }) => {
       </div>
     </div>
   );
+};
+Login.propTypes = {
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default Login;

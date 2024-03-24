@@ -5,16 +5,20 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Login from './Login';
 
 
+
 const SignUp = ({ closeModal }) => {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [SignInSuccess, setSignInSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const modalRef = useRef();
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -74,18 +78,55 @@ const SignUp = ({ closeModal }) => {
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
         console.log("User signed in with Google:", user);
-        setTimeout(() => {
-          navigate("/scholarship");
-        }, 2000);
+
+        try {
+          // Check if the user already exists in Firestore
+          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          let nameFromFirestore = ""; // Variable to store the name from Firestore
+          let emailFromFirestore = "";
+          let roleFromFirestore = "";
+          if (userDoc.exists()) {
+            // If user exists in Firestore, retrieve the name from there
+            nameFromFirestore = userDoc.data().name;
+            emailFromFirestore = userDoc.data().email;
+            roleFromFirestore = userDoc.data().role;
+
+          } else {
+            // If user doesn't exist in Firestore, extract name from email
+            nameFromFirestore = user.email.split("@")[0];
+
+            // Save user data to Firestore only if the user doesn't exist
+            await setDoc(doc(firestore, "users", user.uid), {
+              name: nameFromFirestore,
+              email: user.email,
+            });
+          }
+
+          if (roleFromFirestore === "admin") {
+            // Redirect to the admin dashboard if the user is an admin
+            navigate("/admin");
+          } else {// Set the username obtained from Firestore or extracted from email
+          setUserName(nameFromFirestore);
+          setUserEmail(user.email);
+          setSignInSuccess(true);
+          setTimeout(() => {
+            navigate("/profile", { state: { userName: nameFromFirestore , userEmail: user.email} });
+          }, 2000);
+        }
+        } catch (error) {
+          console.error("Error handling sign-in with Google:", error);
+          setErrorMessage("Failed to sign in with Google. Please try again.");
+        }
       })
       .catch((error) => {
         setErrorMessage("Failed to sign in with Google. Please try again.");
         console.error("Sign-in with Google error:", error);
       });
   };
+  
 
   useEffect(() => {
     if (signUpSuccess) {

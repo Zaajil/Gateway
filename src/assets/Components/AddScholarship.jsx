@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios library
+import AdminNavbar from "./AdminNavbar";
 
 const AddScholarship = () => {
+  const [currentPage, setCurrentPage] = useState("Dashboard");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
   const [scholarshipData, setScholarshipData] = useState({
     scholarship_name: "",
     about_scholarship: "",
@@ -14,11 +18,35 @@ const AddScholarship = () => {
     institution: "",
   });
 
-  const navigate = useNavigate();
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setShowDropdown(false);
+
+    if (page === "Dashboard") {
+      navigate("/admin"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Add Scholarship") {
+      navigate("/add"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Scholarship Collection") {
+      navigate("/admin-scholarship"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Edit Scholarship") {
+      navigate("/edit"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Profile") {
+      navigate("/#"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setScholarshipData({ ...scholarshipData, [name]: value });
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   const handleFormSubmit = async (e) => {
@@ -39,6 +67,13 @@ const AddScholarship = () => {
   };
 
   return (
+    <>
+    <AdminNavbar
+      currentPage={currentPage}
+      handlePageChange={handlePageChange}
+      showDropdown={showDropdown}
+      toggleDropdown={toggleDropdown}
+    />
     <div className="flex flex-col h-screen ">
       {/* Main Content */}
       <main className="flex-grow p-6 pl-60 pb-20 ml-20">
@@ -175,6 +210,7 @@ const AddScholarship = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 
