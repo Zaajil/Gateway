@@ -5,9 +5,6 @@ import Navbar from "./Navbar";
 const DetailScholarship = () => {
   const [scholarship, setScholarship] = useState(null);
   const { id } = useParams();
-  const handleApply = () => {
-    alert("Please login to apply for the scholarship.");
-  };
   useEffect(() => {
     const fetchScholarshipDetails = async () => {
       try {
@@ -62,12 +59,6 @@ const DetailScholarship = () => {
               </div>
               {/* Add more scholarship details here */}
             </div>
-            <button
-              className="mt-4 bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-900"
-              onClick={handleApply}
-            >
-              Apply Scholarship
-            </button>
           </div>
         </div>
       </div>

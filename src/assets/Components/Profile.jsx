@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import NavbarLogin from "./NavbarLogin";
+import NoticeBoard from "./NoticeBoard";
 
 const Profile = () => {
   const location = useLocation();
@@ -37,7 +38,7 @@ const Profile = () => {
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
     if (page === "Profile") {
-      navigate("/scholarship", {
+      navigate("/userdetails", {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
@@ -120,14 +121,15 @@ const Profile = () => {
               <div className="flex items-center justify-center mb-4">
                 <img
                   className="w-12 h-12"
-                  src="search scholarship main.png"
-                  alt="Another Icon"
+                  src="apply scholarship main.png"
+                  alt="Apply Scholarship Icon"
                 />
               </div>
-              {/* Another card content */}
+              {/* Favourite Scholarship content */}
             </div>
           </div>
         )}
+        <NoticeBoard/>
         {/* Other pages content */}
       </main>
     </>

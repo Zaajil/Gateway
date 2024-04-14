@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import axios from "axios"; // Import axios for making HTTP requests
 import { useLocation } from "react-router-dom";
 import NavbarLogin from "./NavbarLogin";
+import SCard from "./SCard";
+import SCardLogin from "./ScardLogin";
 
 const SearchByCriteria = () => {
   const location = useLocation();
@@ -11,38 +13,51 @@ const SearchByCriteria = () => {
   const userEmail = state ? state.userEmail : "";
   const [currentPage, setCurrentPage] = useState("Search by criteria");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [filters, setFilters] = useState({
-    gender: "",
-    income: "",
-    religion: "",
-    category: "",
-    course: [],
-    instituteState: "",
-    aplBpl: "",
-  });
-  const incomeOptions = [
-    "0-1 lakh",
-    "1 lakh-2 lakh",
-    "2 lakh-4 lakh",
-    "4 lakh-8 lakh",
-    "above 8 lakh",
-  ];
-  const courseOptions = [
-    "Upto 10th",
-    "+1 and +2",
-    "Graduation",
-    "Post Graduation",
-    "Medical",
-    "Engineering",
-  ];
+  const [present_class, setPresentClass] = useState("");
+  const [gender, setGender] = useState("");
+  const [institution, setInstitution] = useState("");
+  const [filteredScholarships, setFilteredScholarships] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    if (!present_class || !gender || !institution) {
+      alert("Please select all criteria.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/scholarships/filter/",
+        {
+          params: {
+            course: present_class,
+            gender: gender,
+            institution: institution,
+          },
+        }
+      );
+      setLoading(false);
+      setFilteredScholarships(response.data);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     setShowDropdown(false);
 
-    if (page === "Dashboard") {
-      navigate("/profile", {
+    // Check if the page is "Search by criteria", then navigate to the SearchByCriteria page
+    if (page === "Search by criteria") {
+      navigate("/searchby", {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
@@ -57,7 +72,12 @@ const SearchByCriteria = () => {
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
     if (page === "Profile") {
-      navigate("/scholarship", {
+      navigate("/userdetails", {
+        state: { userName: userName, userEmail: userEmail },
+      }); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Dashboard") {
+      navigate("/profile", {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
@@ -65,32 +85,6 @@ const SearchByCriteria = () => {
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
-  };
-
-  const handleFilterChange = (filter, value) => {
-    setFilters({ ...filters, [filter]: value });
-  };
-
-  const handleCheckboxChange = (filter, value) => {
-    if (filters[filter].includes(value)) {
-      // Remove the value if already present
-      setFilters({
-        ...filters,
-        [filter]: filters[filter].filter((item) => item !== value),
-      });
-    } else {
-      // Add the value if not present
-      setFilters({
-        ...filters,
-        [filter]: [...filters[filter], value],
-      });
-    }
-  };
-
-  const handleSearch = () => {
-    // Implement logic to search scholarships based on filters
-    console.log("Filters:", filters);
-    // Navigate or perform search based on filters
   };
 
   return (
@@ -109,229 +103,97 @@ const SearchByCriteria = () => {
           <h1 className="text-2xl font-semibold mb-4 ">
             Find scholarships matched to you
           </h1>
-          {/* Gender filter */}
-          <div className="mb-4">
-            <fieldset>
-              <legend className="block text-sm font-medium text-gray-700 mb-1">
+          {/* Criteria form */}
+          <form className="max-w-sm mx-auto mt-10" onSubmit={handleSubmit}>
+            <div className="mb-5">
+              <label
+                htmlFor="className"
+                className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              >
+                Your Present Class
+              </label>
+              <select
+                id="className"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-light gray-700 border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={present_class}
+                onChange={(e) => setPresentClass(e.target.value)}
+              >
+                <option value="">Select your Present Class</option>
+                <option value="Upto 10th">Upto 10th</option>
+                <option value="+1&+2">+1&+2</option>
+                <option value="Graduation">Graduation</option>
+                <option value="Post Graduation">Post Graduation</option>
+                <option value="ITI">ITI</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Medical">Medical</option>
+              </select>
+            </div>
+            <div className="mb-5">
+              <label
+                htmlFor="class"
+                className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              >
                 Gender
-              </legend>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  checked={filters.gender === "male"}
-                  onChange={(e) => handleFilterChange("gender", e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="male" className="mr-4">
-                  Male
-                </label>
-                <input
-                  type="radio"
-                  id="female"
-                  name="gender"
-                  value="female"
-                  checked={filters.gender === "female"}
-                  onChange={(e) => handleFilterChange("gender", e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="female" className="mr-4">
-                  Female
-                </label>
-                <input
-                  type="radio"
-                  id="other"
-                  name="gender"
-                  value="other"
-                  checked={filters.gender === "other"}
-                  onChange={(e) => handleFilterChange("gender", e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="other">Other</label>
-              </div>
-            </fieldset>
-          </div>
+              </label>
+              <select
+                id="class"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-light gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="">Select your Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div className="mb-5">
+              <label
+                htmlFor="class"
+                className="block mb-2 text-sm font-medium text-gray-900 text-black"
+              >
+                State of Institute
+              </label>
+              <select
+                id="class"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-light gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={institution}
+                onChange={(e) => setInstitution(e.target.value)}
+              >
+                <option value="">State of Institute</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Outside Kerala">Outside Kerala</option>
+              </select>
+            </div>
 
-          {/* Income filter */}
-          <div className="mb-4">
-            <fieldset>
-              <legend className="block text-sm font-medium text-gray-700 mb-1">
-                Income
-              </legend>
-              <div className="flex flex-wrap">
-                {incomeOptions.map((incomeRange) => (
-                  <div key={incomeRange} className="mr-4 mb-2">
-                    <input
-                      type="checkbox"
-                      id={incomeRange}
-                      name="income"
-                      value={incomeRange}
-                      checked={filters.income.includes(incomeRange)}
-                      onChange={(e) =>
-                        handleCheckboxChange("income", incomeRange)
-                      }
-                      className="mr-2"
-                    />
-                    <label htmlFor={incomeRange}>{incomeRange}</label>
-                  </div>
-                ))}
-              </div>
-            </fieldset>
-          </div>
-
-          {/* Religion filter */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Religion
-            </label>
-            <select
-              value={filters.religion}
-              onChange={(e) => handleFilterChange("religion", e.target.value)}
-              className="block w-40 border border-black rounded-md shadow-md py-2 px-3 bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            <button
+              type="submit"
+              className="flex items-center w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              disabled={loading}
             >
-              <option value="">Select Religion</option>
-              <option value="hindu">Hindu</option>
-              <option value="buddhism">Buddhism</option>
-              <option value="christian">Christian</option>
-              <option value="jain">Jain</option>
-              <option value="parsi">Parsi</option>
-              <option value="sikh">Sikh</option>
-              <option value="muslim">Muslim</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          {/* Category filter */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <select
-              value={filters.category}
-              onChange={(e) => handleFilterChange("category", e.target.value)}
-              className="block w-40 border border-black rounded-md shadow-md py-2 px-3 bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            >
-              <option value="">Select Category</option>
-              <option value="general">General</option>
-              <option value="OBC">OBC</option>
-              <option value="SC">SC</option>
-              <option value="ST">ST</option>
-            </select>
-          </div>
-
-          {/* Course filter */}
-          <div className="mb-4">
-            <fieldset>
-              <legend className="block text-sm font-medium text-gray-700 mb-1">
-                Course
-              </legend>
-              <div className="flex flex-wrap">
-                {courseOptions.map((course) => (
-                  <div key={course} className="mr-4 mb-2">
-                    <input
-                      type="checkbox"
-                      id={course}
-                      name="course"
-                      value={course}
-                      checked={filters.course.includes(course)}
-                      onChange={(e) =>
-                        handleCheckboxChange("course", e.target.value)
-                      }
-                      className="mr-2"
-                    />
-                    <label htmlFor={course}>{course}</label>
-                  </div>
-                ))}
-              </div>
-            </fieldset>
-          </div>
-
-          {/* Institute State filter */}
-          <div className="mb-4">
-            <fieldset>
-              <legend className="block text-sm font-medium text-gray-700 mb-1">
-                Institute State
-              </legend>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="kerala"
-                  name="instituteState"
-                  value="kerala"
-                  checked={filters.instituteState === "kerala"}
-                  onChange={(e) =>
-                    handleFilterChange("instituteState", e.target.value)
-                  }
-                  className="mr-2"
-                />
-                <label htmlFor="kerala" className="mr-4">
-                  Kerala
-                </label>
-                <input
-                  type="radio"
-                  id="outsideKerala"
-                  name="instituteState"
-                  value="outside kerala"
-                  checked={filters.instituteState === "outside kerala"}
-                  onChange={(e) =>
-                    handleFilterChange("instituteState", e.target.value)
-                  }
-                  className="mr-2"
-                />
-                <label htmlFor="outsideKerala">Outside Kerala</label>
-              </div>
-            </fieldset>
-          </div>
-
-          {/* APL/BPL filter */}
-          <div className="mb-4">
-            <fieldset>
-              <legend className="block text-sm font-medium text-gray-700 mb-1">
-                APL/BPL
-              </legend>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="apl"
-                  name="aplBpl"
-                  value="apl"
-                  checked={filters.aplBpl === "apl"}
-                  onChange={(e) => handleFilterChange("aplBpl", e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="apl" className="mr-4">
-                  APL
-                </label>
-                <input
-                  type="radio"
-                  id="bpl"
-                  name="aplBpl"
-                  value="bpl"
-                  checked={filters.aplBpl === "bpl"}
-                  onChange={(e) => handleFilterChange("aplBpl", e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="bpl">BPL</label>
-              </div>
-            </fieldset>
-          </div>
-
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleSearch}
-          >
-            Find Matched Scholarships
-          </button>
+              {loading ? "Finding Scholarships..." : "Find Scholarships"}
+            </button>
+          </form>
         </div>
+        {filteredScholarships.map((scholarship,index) => (
+        <SCardLogin
+        key={index}
+        id={scholarship.id}
+        name={scholarship.name}
+        lastDate={scholarship.lastDate}
+        amount={scholarship.amount}
+        eligibility={scholarship.eligibility}
+        />
+      ))}
+
+        {/* Display loading indicator if loading */}
+        {loading && <p>Loading...</p>}
+
+        {/* Display error message if error */}
+        {error && <p>Error: {error}</p>}
       </main>
     </>
   );
 };
-SearchByCriteria.propTypes = {
-  location: PropTypes.shape({
-    state: PropTypes.object,
-  }),
-};
+
 export default SearchByCriteria;

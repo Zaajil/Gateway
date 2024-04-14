@@ -9,7 +9,7 @@ const EditScholarship = () => {
   const [selectedScholarship, setSelectedScholarship] = useState(null);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState("Dashboard");
+  const [currentPage, setCurrentPage] = useState("Edit Scholarship");
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
@@ -74,12 +74,12 @@ const EditScholarship = () => {
         );
         alert("Scholarship deleted successfully");
         // Optionally, you can navigate the user to another page after deletion
-        // navigate("/admin-scholarship"); 
+        // navigate("/admin-scholarship");
       } catch (error) {
         console.error("Error deleting scholarship:", error);
       }
     }
-};
+  };
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -212,6 +212,26 @@ const EditScholarship = () => {
                     <option value="Outside Kerala">Outside Kerala</option>
                   </select>
                 </div>
+                <div className="mt-10">
+                  <label className="block font-semibold">Documents Required:</label>
+                  <input
+                    type="text"
+                    name="documents"
+                    value={formData.documents}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500 w-80"
+                  />
+                </div>
+                <div className="mt-10">
+                  <label className="block font-semibold">Website:</label>
+                  <input
+                    type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500 w-80"
+                  />
+                </div>
                 {/* Save button */}
                 <button
                   type="submit"
@@ -220,11 +240,11 @@ const EditScholarship = () => {
                   Save
                 </button>
                 <button
-    onClick={handleDelete}
-    className="bg-red-500 text-white rounded px-4 py-2"
-  >
-    Delete
-  </button>
+                  onClick={handleDelete}
+                  className="bg-red-500 text-white rounded px-4 py-2"
+                >
+                  Delete
+                </button>
               </form>
             )}
           </div>

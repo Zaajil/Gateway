@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Login from "../../assets/Login"; // Import the Login component
 import SignUp from "../../assets/Signup"; // Import the SignUp component
 
-const Navbar = () => {
+const NavbarLandingPage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
@@ -33,7 +33,7 @@ const Navbar = () => {
   }, [isLoginOpen, isSignUpOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 w-full shadow-md z-50 bg-white border-gray-200 dark:bg-gray-900 ">
+    <nav className="fixed top-0 left-0 w-full shadow-md z-50 bg-transparent border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           to="/"
@@ -70,7 +70,7 @@ const Navbar = () => {
           </svg>
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 md:mt-0 md:border-t border-gray-200 dark:border-gray-700 md:flex-row md:space-x-8 rtl:space-x-reverse">
             <li>
               <Link
                 to="/"
@@ -87,11 +87,11 @@ const Navbar = () => {
                 Scholarships
               </Link>
             </li>
-          
+           
             <li>
               <button
                 onClick={toggleLogin}
-                className="ml-3 bg-[#24306E] text-white font-bold py-2 px-4 rounded-full"
+                className="ml-3 bg-transparent text-[#24306E] font-bold py-2 px-4 rounded-full border border-[#24306E] hover:bg-[#24306E] hover:text-white"
               >
                 Login
               </button>
@@ -99,7 +99,7 @@ const Navbar = () => {
             <li>
               <button
                 onClick={toggleSignUp}
-                className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full"
+                className="ml-3 bg-white text-[#24306E] font-bold py-2 px-4 rounded-full border border-[#24306E] hover:bg-[#24306E] hover:text-white"
               >
                 Sign up
               </button>
@@ -126,4 +126,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarLandingPage;

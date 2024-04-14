@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import SCard from "./Components/SCard";
+import SCard from "./Components/ScardLogin";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -11,13 +11,12 @@ const AdminScholarshipList = () => {
   const { state } = location;
   const userName = state ? state.userName : "";
   const userEmail = state ? state.userEmail : "";
-  const [currentPage, setCurrentPage] = useState("Dashboard");
+  const [currentPage, setCurrentPage] = useState("Scholarship Collection");
   const [showDropdown, setShowDropdown] = useState(false);
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  
   const handlePageChange = (page) => {
     setCurrentPage(page);
     setShowDropdown(false);
@@ -59,31 +58,37 @@ const AdminScholarshipList = () => {
 
   return (
     <>
-    <AdminNavbar
-      currentPage={currentPage}
-      handlePageChange={handlePageChange}
-      showDropdown={showDropdown}
-      toggleDropdown={toggleDropdown}
-    />
-        <div className="ml-80 mt-8 ">
-          {loading ? (
-            <h2>Loading...</h2>
-          ) : (
-            scholarships.map((scholarship, index) => (
-              <SCard
-                userName={userName}
-                userEmail={userEmail}
-                key={index}
-                id={scholarship.id}
-                name={scholarship.name}
-                lastDate={scholarship.lastDate}
-                amount={scholarship.amount}
-                eligibility={scholarship.eligibility}
-              />
-            ))
-          )}
-        </div>
-      </>
+      <AdminNavbar
+        currentPage={currentPage}
+        handlePageChange={handlePageChange}
+        showDropdown={showDropdown}
+        toggleDropdown={toggleDropdown}
+      />
+      <div
+        className="ml-80 mt-4 flex-grow grid grid-cols-2 gap-4"
+        style={{ overflowY: "auto", maxHeight: "calc(100vh - 80px)" }}
+      >
+        <h2 className="text-2xl mt-6 font-semibold ml-96 mb-4 col-span-full">
+          Scholarship List
+        </h2>
+        {loading ? (
+          <h2>Loading...</h2>
+        ) : (
+          scholarships.map((scholarship, index) => (
+            <SCard
+              userName={userName}
+              userEmail={userEmail}
+              key={index}
+              id={scholarship.id}
+              name={scholarship.name}
+              lastDate={scholarship.lastDate}
+              amount={scholarship.amount}
+              eligibility={scholarship.eligibility}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 };
 AdminScholarshipList.propTypes = {

@@ -1,4 +1,26 @@
+import { useState, useEffect } from "react";
+
 const NoticeBoard = () => {
+  const [notices, setNotices] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the backend API
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/notices/notice/");
+        if (!response.ok) {
+          throw new Error("Failed to fetch notice board data");
+        }
+        const data = await response.json();
+        setNotices(data.notices); // Update state with fetched data
+      } catch (error) {
+        console.error("Error fetching notice board data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
+
   return (
     <div className="flex justify-evenly mt-20 relative z-[-10]">
       <style>
@@ -12,7 +34,7 @@ const NoticeBoard = () => {
           .scrolling-content {
             display: flex;
             flex-direction: column;
-            animation: scrollAnimation 10s linear infinite;
+            animation: scrollAnimation 20s linear infinite; /* Adjust speed here */
           }
 
           @keyframes scrollAnimation {
@@ -30,51 +52,11 @@ const NoticeBoard = () => {
           Notice Board
         </h1>
         <div className="scrolling-container">
-          <div className="p-10 scrolling-content">
-            <ul className="list-disc">
-              <li>
-                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-              <li>
-                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-              <li>
-                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-            </ul>
-          </div>
-          {/* Clone the content to create a seamless loop */}
-          <div className="p-10 scrolling-content">
-            <ul className="list-disc">
-              <li>
-                1.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-              <li>
-                2.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-              <li>
-                3.Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Cumque pariatur ut dolorem, modi similique, est expedita
-                doloremque, omnis soluta error commodi impedit temporibus?
-                Aperiam, laborum? Quae sit ab aspernatur numquam.
-              </li>
-            </ul>
-          </div>
+          {notices.map((notice, index) => (
+            <div key={index} className="p-10 scrolling-content">
+              <p>{notice.content}</p>
+            </div>
+          ))}
         </div>
       </div>
       <img

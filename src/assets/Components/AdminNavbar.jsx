@@ -2,41 +2,32 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 const AdminNavbar = ({
-
   currentPage,
   handlePageChange,
   showDropdown,
   toggleDropdown,
+  setSearchQuery,
 }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const confirmLogout = () => {
     const isConfirmed = window.confirm("Are you sure you want to logout?");
     if (isConfirmed) {
-      navigate("/") // Call the logout function
+      navigate("/"); // Call the logout function
     }
   };
-  
-  
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value); // Update search query in parent component
+  };
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col mt-16 ">
       {/* Top Navigation */}
-      <header className="fixed top-0 w-full justify-between items-center bg-white shadow py-4 px-6">
+      <header className="fixed flex top-0 w-full justify-between items-center bg-white shadow py-4 px-6">
         {/* Welcome Message */}
         <div className="pl-80">
           <div>Welcome Admin </div>
         </div>
         {/* Avatar and Dropdown */}
         <div className="flex items-center pl-96 ">
-          <input
-            type="text"
-            placeholder="Search"
-            className="border border-gray-300 rounded px-4 py-2 focus:outline-none mr-2"
-          />
-          <img
-            className="w-6 h-6 mr-2"
-            src="notifications navbar.png"
-            alt="Notification Icon"
-          />
           <div className="relative" onClick={toggleDropdown}>
             <div className="h-10 w-10 overflow-hidden rounded-full cursor-pointer">
               <svg
@@ -60,17 +51,9 @@ const AdminNavbar = ({
                   <li>
                     <button
                       className="text-gray-800 block px-4 py-2 text-sm capitalize w-full hover:bg-gray-300"
-                      onClick={() => handlePageChange("Profile")}
+                      onClick={() => handlePageChange("Dashboard")}
                     >
-                      Profile
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className="text-gray-800 block px-4 py-2 text-sm capitalize w-full hover:bg-gray-300"
-                      onClick={() => handlePageChange("Change Password")}
-                    >
-                      Change Password
+                      Dashboard
                     </button>
                   </li>
                   <li>
@@ -88,13 +71,13 @@ const AdminNavbar = ({
         </div>
       </header>
       {/* Main Content */}
-      <div className="flex h-screen pl-90 overflow-y-auto">
+      <div className="flex pl-90 overflow-y-auto">
         {/* Sidebar */}
         <nav className="fixed top-0 left-0 flex flex-col items-start justify-center bg-blue-900 text-white w-75 p-4 h-full overflow-y-auto">
           {/* Sidebar Logo */}
           <img
             className="w-16 h-16 ml-20 mb-12 rounded-full overflow-hidden"
-            src="gws icon p.png"
+            src="gws.png"
             alt="Logo"
           />
           {/* Sidebar Links */}
@@ -169,9 +152,9 @@ const AdminNavbar = ({
             </li>
             <li className="mb-6 ml-5">
               <button
-                onClick={() => handlePageChange("Profile")}
+                onClick={() => handlePageChange("Notice")}
                 className={`flex items-center text-lg font-semibold ${
-                  currentPage === "Profile" ? "text-blue-500" : "text-white-500"
+                  currentPage === "Notice" ? "text-blue-500" : "text-white-500"
                 }`}
               >
                 <img
@@ -179,14 +162,13 @@ const AdminNavbar = ({
                   alt="Profile Icon"
                   className="w-8 h-8 mr-2"
                 />
-                Profile
+                Notice
               </button>
             </li>
             <li className="mb-6 ml-5">
               <button
                 onClick={confirmLogout}
                 className="flex items-center text-lg font-semibold"
-                
               >
                 <img
                   src="logout sidebar.png"

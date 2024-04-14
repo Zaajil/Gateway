@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./assets/LandingPage";
 import ScholarshipList from "./assets/ScholarshipList";
@@ -15,15 +16,31 @@ import DetailScholarship from "./assets/Components/DetailScholarship";
 import LoginDetailScholarship from "./assets/Components/LoginDetailScholarship";
 import AdminScholarshipList from "./assets/AdminScholarshipList";
 import EditScholarship from "./assets/Components/EditScholarship";
+import AdminNotice from "./assets/Components/AdminNotice";
+import AddNotice from "./assets/Components/AddNotice";
+import EditNotice from "./assets/Components/EditNotice";
+import ProfileUser from "./assets/Components/ProfileUser";
 
 const App = () => {
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  useEffect(() => {
+    console.log("userName:", userName);
+    console.log("userEmail:", userEmail);
+  }, [userName, userEmail]);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/scholarship" element={<ScholarshipList />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <Login setUserName={setUserName} setUserEmail={setUserEmail} />
+          }
+        />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/searchby" element={<SearchByCriteria />} />
@@ -38,7 +55,16 @@ const App = () => {
           element={<FavouriteScholarship />}
         />
         <Route path="/scholarships/:id" element={<DetailScholarship />} />
-        <Route path="a/scholarships/:id" element={<LoginDetailScholarship />} />
+        <Route
+          path="/:id"
+          element={
+            <LoginDetailScholarship userName={userName} userEmail={userEmail} />
+          }
+        />
+        <Route path="/admin-notice" element={<AdminNotice />} />
+        <Route path="/add-notice" element={<AddNotice />} />
+        <Route path="/edit-notice" element={<EditNotice />} />
+        <Route path="/userdetails" element={<ProfileUser />} />
       </Routes>
     </BrowserRouter>
   );

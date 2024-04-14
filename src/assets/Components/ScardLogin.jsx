@@ -12,7 +12,7 @@ import { firestore } from "../../firebaseConfig"; // Import necessary Firebase m
 import PropTypes from "prop-types";
 import { useNavigate,useLocation } from "react-router-dom";
 
-const SCard = (props) => {
+const SCardLogin = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const location = useLocation();
@@ -48,11 +48,7 @@ const SCard = (props) => {
   }, [props.id, props.userEmail]);
 
   const handleViewScholarship = () => {
-    if (userEmail) {
-      navigate(`/a/scholarships/${props.id}`, { state: { userName, userEmail } });
-    } else {
-      navigate(`/scholarships/${props.id}`);
-    }
+      navigate(`/${props.id}`, { state: { userName, userEmail } });
   };
  
   const handleClick = async () => {
@@ -162,7 +158,7 @@ const SCard = (props) => {
     </div>
   );
 };
-SCard.propTypes = {
+SCardLogin.propTypes = {
   userName: PropTypes.string.isRequired,
   userEmail: PropTypes.string.isRequired, // userName prop is required and should be a string
   id: PropTypes.string.isRequired,
@@ -175,4 +171,4 @@ SCard.propTypes = {
     state: PropTypes.object,
   }),
 };
-export default SCard;
+export default SCardLogin;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { auth, firestore  } from "../firebaseConfig";
+import { auth, firestore } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -7,18 +7,12 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import Login from './Login';
-
-
 
 const SignUp = ({ closeModal }) => {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
-  const [SignInSuccess, setSignInSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const modalRef = useRef();
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,11 +30,13 @@ const SignUp = ({ closeModal }) => {
 
   const signUpWithEmailPassword = async (event) => {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    const name = event.target.name.value;
-    const phoneNumber = event.target.phoneNumber.value;
-    const confirmPassword = event.target.confirmPassword.value;
+
+    const formData = new FormData(event.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const name = formData.get("name");
+    const phoneNumber = formData.get("phoneNumber");
+    const confirmPassword = formData.get("confirmPassword");
 
     if (password.length < 6) {
       setErrorMessage("Password should be at least 6 characters");
@@ -61,7 +57,8 @@ const SignUp = ({ closeModal }) => {
 
       const user = userCredential.user;
 
-      await setDoc(doc(firestore , "users", user.uid), {
+      // Set user details with email as document ID
+      await setDoc(doc(firestore, "users", email), {
         name,
         email,
         phoneNumber,
@@ -81,41 +78,46 @@ const SignUp = ({ closeModal }) => {
       .then(async (result) => {
         const user = result.user;
         console.log("User signed in with Google:", user);
-
+        console.log("User email:", user.email);
+  
         try {
           // Check if the user already exists in Firestore
-          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          const userDoc = await getDoc(doc(firestore, "users", user.email)); // Use user's email as document ID
           let nameFromFirestore = ""; // Variable to store the name from Firestore
-          let emailFromFirestore = "";
           let roleFromFirestore = "";
           if (userDoc.exists()) {
             // If user exists in Firestore, retrieve the name from there
             nameFromFirestore = userDoc.data().name;
-            emailFromFirestore = userDoc.data().email;
             roleFromFirestore = userDoc.data().role;
-
           } else {
             // If user doesn't exist in Firestore, extract name from email
-            nameFromFirestore = user.email.split("@")[0];
-
+            nameFromFirestore = user.displayName;
+  
             // Save user data to Firestore only if the user doesn't exist
-            await setDoc(doc(firestore, "users", user.uid), {
+            await setDoc(doc(firestore, "users", user.email), {
               name: nameFromFirestore,
               email: user.email,
             });
           }
-
+  
           if (roleFromFirestore === "admin") {
             // Redirect to the admin dashboard if the user is an admin
-            navigate("/admin");
-          } else {// Set the username obtained from Firestore or extracted from email
-          setUserName(nameFromFirestore);
-          setUserEmail(user.email);
-          setSignInSuccess(true);
-          setTimeout(() => {
-            navigate("/profile", { state: { userName: nameFromFirestore , userEmail: user.email} });
-          }, 2000);
-        }
+            setIsAdmin(true);
+            setSignInSuccess(true);
+            setUserName(nameFromFirestore);
+            setUserEmail(user.email);
+            navigate("/admin", {state: { userName: nameFromFirestore, userEmail: user.email}});
+          } else {
+            // Set the username obtained from Firestore or extracted from email
+            setUserName(nameFromFirestore);
+            setUserEmail(user.email);
+            setSignInSuccess(true);
+            setTimeout(() => {
+              navigate("/profile", {
+                state: { userName: nameFromFirestore, userEmail: user.email },
+              });
+            }, 2000);
+          }
         } catch (error) {
           console.error("Error handling sign-in with Google:", error);
           setErrorMessage("Failed to sign in with Google. Please try again.");

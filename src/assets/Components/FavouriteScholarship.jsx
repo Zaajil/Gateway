@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import SCard from "./SCard";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { auth, firestore } from "../../firebaseConfig"; // Import necessary Firebase methods
+import SCard from "./ScardLogin";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
+import { firestore } from "../../firebaseConfig";
 import PropTypes from "prop-types";
 import NavbarLogin from "./NavbarLogin";
 
@@ -14,11 +14,33 @@ const FavouriteScholarship = () => {
   const { state } = location;
   const userName = state ? state.userName : "";
   const userEmail = state ? state.userEmail : "";
-  const [currentPage, setCurrentPage] = useState("Dashboard");
+  const [currentPage, setCurrentPage] = useState("Favourite Scholarship");
   const [showDropdown, setShowDropdown] = useState(false);
   const [favoriteScholarships, setFavoriteScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const addToFavorites = async (scholarshipId) => {
+    try {
+      const q = query(
+        collection(firestore, "users"),
+        where("email", "==", userEmail)
+      );
+      const querySnapshot = await getDocs(q);
+      const userDoc = querySnapshot.docs[0];
+      if (userDoc && userDoc.exists()) {
+        const userRef = doc(firestore, "users", userDoc.id);
+        await updateDoc(userRef, {
+          favoriteScholarships: arrayUnion({ id: scholarshipId }),
+        });
+        console.log("Scholarship added to favorites successfully.");
+      } else {
+        console.log("User document not found for the provided email.");
+      }
+    } catch (error) {
+      console.error("Error adding scholarship to favorites:", error);
+    }
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -35,13 +57,18 @@ const FavouriteScholarship = () => {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
-    if (page === "Dashboard") {
-      navigate("/profile", {
+    if (page === "Favourite Scholarship") {
+      navigate("/favourite-scholarship", {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
     if (page === "Profile") {
-      navigate("/scholarship", {
+      navigate("/userdetails", {
+        state: { userName: userName, userEmail: userEmail },
+      }); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Dashboard") {
+      navigate("/profile", {
         state: { userName: userName, userEmail: userEmail },
       }); // Replace "/searchby" with the actual route for SearchByCriteria
     }
@@ -110,7 +137,12 @@ const FavouriteScholarship = () => {
         showDropdown={showDropdown}
         toggleDropdown={toggleDropdown}
       />
-      <div className="ml-80 mt-0 ">
+      <div className="ml-80 mt-4 flex-grow grid grid-cols-2 gap-4"
+        style={{ overflowY: "auto", maxHeight: "calc(100vh - 80px)" }}
+      >
+      <h2 className="text-2xl mt-6 font-semibold ml-96 mb-4 col-span-full">
+          Favourite Scholarships
+        </h2>
         {loading ? (
           <h2>Loading...</h2>
         ) : favoriteScholarships.length > 0 ? (
@@ -124,6 +156,7 @@ const FavouriteScholarship = () => {
               lastDate={scholarship.lastDate}
               amount={scholarship.amount}
               eligibility={scholarship.eligibility}
+              addToFavorites={addToFavorites} // Pass addToFavorites function as prop
             />
           ))
         ) : (

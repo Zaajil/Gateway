@@ -25,7 +25,7 @@ const ScholarshipList = () => {
   return (
     <div>
       <Navbar />
-      <div className="mt-20 ml-24">
+      <div className="mt-20 ml-24 grid grid-cols-3 gap-8">
         {loading ? (
           <h2>Loading...</h2>
         ) : (

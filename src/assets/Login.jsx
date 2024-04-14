@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate hooks
+import { Link, useNavigate } from "react-router-dom";
 import {
   getAuth,
   signInWithPopup,
@@ -12,13 +12,13 @@ import { auth, firestore } from "../firebaseConfig";
 import PropTypes from "prop-types";
 
 const Login = ({ closeModal }) => {
-  const [SignInSuccess, setSignInSuccess] = useState(false);
+  const [signInSuccess, setSignInSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const modalRef = useRef();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,36 +41,34 @@ const Login = ({ closeModal }) => {
         const user = result.user;
         console.log("User signed in with Google:", user);
         console.log("User email:", user.email);
-
+  
         try {
           // Check if the user already exists in Firestore
-          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          const userDoc = await getDoc(doc(firestore, "users", user.email)); // Use user's email as document ID
           let nameFromFirestore = ""; // Variable to store the name from Firestore
-          let emailFromFirestore = "";
           let roleFromFirestore = "";
           if (userDoc.exists()) {
             // If user exists in Firestore, retrieve the name from there
             nameFromFirestore = userDoc.data().name;
-            emailFromFirestore = userDoc.data().email;
             roleFromFirestore = userDoc.data().role;
           } else {
             // If user doesn't exist in Firestore, extract name from email
-            nameFromFirestore = user.email.split("@")[0];
-
+            nameFromFirestore = user.displayName;
+  
             // Save user data to Firestore only if the user doesn't exist
-            await setDoc(doc(firestore, "users", user.uid), {
+            await setDoc(doc(firestore, "users", user.email), {
               name: nameFromFirestore,
               email: user.email,
             });
           }
-
+  
           if (roleFromFirestore === "admin") {
+            // Redirect to the admin dashboard if the user is an admin
             setIsAdmin(true);
-            setSignInSuccess(true); // Set SignInSuccess to true for both admin and non-admin users
+            setSignInSuccess(true);
             setUserName(nameFromFirestore);
             setUserEmail(user.email);
-  // Redirect to the admin dashboard if the user is an admin
-            navigate("/admin", {state: { userName: nameFromFirestore, userEmail: user.email,}});
+            navigate("/admin", {state: { userName: nameFromFirestore, userEmail: user.email}});
           } else {
             // Set the username obtained from Firestore or extracted from email
             setUserName(nameFromFirestore);
@@ -92,24 +90,25 @@ const Login = ({ closeModal }) => {
         console.error("Sign-in with Google error:", error);
       });
   };
+  
 
-  const signInWithEmailPassword = (event) => {
+  const signInWithEmailPassword = async (event) => {
     event.preventDefault();
     const auth = getAuth(firebaseApp);
     const email = event.target.email.value;
     const password = event.target.password.value;
-
+  
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-
+  
         try {
           // Check if the user already exists in Firestore
-          const userDoc = await getDoc(doc(firestore, "users", user.uid));
+          const userDoc = await getDoc(doc(firestore, "users", user.email));
           let nameFromFirestore = ""; // Variable to store the name from Firestore
           let emailFromFirestore = "";
           let roleFromFirestore = "";
-
+  
           if (userDoc.exists()) {
             // If user exists in Firestore, retrieve the data from there
             const userData = userDoc.data();
@@ -120,7 +119,7 @@ const Login = ({ closeModal }) => {
             console.error("User data not found in Firestore.");
             // Handle the case when user data is not found
           }
-
+  
           if (roleFromFirestore === "admin") {
             setSignInSuccess(true);
             setIsAdmin(true);
@@ -136,6 +135,7 @@ const Login = ({ closeModal }) => {
           } else {
             // Redirect to the profile page for non-admin users
             setUserName(nameFromFirestore);
+            setUserEmail(emailFromFirestore);
             setSignInSuccess(true);
             setTimeout(() => {
               navigate("/profile", {
@@ -157,22 +157,7 @@ const Login = ({ closeModal }) => {
         setErrorMessage("Invalid email or password.");
       });
   };
-
-  const getUserData = async (uid) => {
-    try {
-      const userDoc = await getDoc(doc(firestore, "users", uid));
-      if (userDoc.exists()) {
-        return userDoc.data(); // Return user data if document exists
-      } else {
-        console.error("User document does not exist.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error retrieving user data from Firestore:", error);
-      throw error;
-    }
-  };
-  console.log(SignInSuccess);
+  
 
   return (
     <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -205,7 +190,7 @@ const Login = ({ closeModal }) => {
         {errorMessage && (
           <p className="text-red-500 text-center mb-4">{errorMessage}</p>
         )}
-        {SignInSuccess &&(
+        {signInSuccess && (
           <p className="text-green-500 text-center mb-4">
             Successfully logged in!
           </p>
@@ -278,7 +263,7 @@ const Login = ({ closeModal }) => {
         </button>
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
-            Dont have an account?{" "}
+            Don't have an account?{" "}
             <Link to="/signup" className="text-[#002D74]">
               Sign up
             </Link>
@@ -294,6 +279,7 @@ const Login = ({ closeModal }) => {
     </div>
   );
 };
+
 Login.propTypes = {
   closeModal: PropTypes.func.isRequired,
 };

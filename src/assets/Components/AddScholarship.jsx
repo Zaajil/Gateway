@@ -4,7 +4,7 @@ import axios from "axios"; // Import Axios library
 import AdminNavbar from "./AdminNavbar";
 
 const AddScholarship = () => {
-  const [currentPage, setCurrentPage] = useState("Dashboard");
+  const [currentPage, setCurrentPage] = useState("Add Scholarship");
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const [scholarshipData, setScholarshipData] = useState({
@@ -16,15 +16,13 @@ const AddScholarship = () => {
     gender: "",
     course: "",
     institution: "",
+    required_documents:""
   });
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     setShowDropdown(false);
 
-    if (page === "Dashboard") {
-      navigate("/admin"); // Replace "/searchby" with the actual route for SearchByCriteria
-    }
     if (page === "Add Scholarship") {
       navigate("/add"); // Replace "/searchby" with the actual route for SearchByCriteria
     }
@@ -34,11 +32,13 @@ const AddScholarship = () => {
     if (page === "Edit Scholarship") {
       navigate("/edit"); // Replace "/searchby" with the actual route for SearchByCriteria
     }
-    if (page === "Profile") {
-      navigate("/#"); // Replace "/searchby" with the actual route for SearchByCriteria
+    if (page === "Scholarship Application") {
+      navigate("/apply-admin"); // Replace "/searchby" with the actual route for SearchByCriteria
+    }
+    if (page === "Notice") {
+      navigate("/admin-notice"); // Replace "/searchby" with the actual route for SearchByCriteria
     }
   };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -197,6 +197,34 @@ const AddScholarship = () => {
                 <option value="Kerala">Kerala</option>
                 <option value="Outside Kerala">Outside Kerala</option>
               </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="required_documents" className="block mb-1">
+                Required Documents
+              </label>
+              <input
+                type="text"
+                id="required_documents"
+                name="required_documents"
+                value={scholarshipData.required_documents}
+                onChange={handleInputChange}
+                className="border border-gray-300 rounded px-4 py-2 focus:outline-none w-full"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="website" className="block mb-1">
+                Website
+              </label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                value={scholarshipData.website}
+                onChange={handleInputChange}
+                className="border border-gray-300 rounded px-4 py-2 focus:outline-none w-full"
+                required
+              />
             </div>
             <div className="mb-4">
               <button
