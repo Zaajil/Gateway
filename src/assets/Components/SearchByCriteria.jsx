@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for making HTTP requests
 import { useLocation } from "react-router-dom";
 import NavbarLogin from "./NavbarLogin";
-import SCard from "./SCard";
-import SCardLogin from "./ScardLogin";
-
+import LoginScard from "./LoginScard"
 const SearchByCriteria = () => {
   const location = useLocation();
   const { state } = location;
@@ -176,7 +174,7 @@ const SearchByCriteria = () => {
           </form>
         </div>
         {filteredScholarships.map((scholarship,index) => (
-        <SCardLogin
+        <LoginScard
         key={index}
         id={scholarship.id}
         name={scholarship.name}
