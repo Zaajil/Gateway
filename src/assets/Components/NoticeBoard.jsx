@@ -7,7 +7,7 @@ const NoticeBoard = () => {
     // Fetch data from the backend API
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/notices/notice/");
+        const response = await fetch("https://gateway.pythonanywhere.com/notices/notice/");
         if (!response.ok) {
           throw new Error("Failed to fetch notice board data");
         }

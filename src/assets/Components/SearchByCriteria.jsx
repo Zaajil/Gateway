@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for making HTTP requests
 import { useLocation } from "react-router-dom";
 import NavbarLogin from "./NavbarLogin";
-import Scard from "./SCard";
+import SCard from "./ScardLogin";
 
 const SearchByCriteria = () => {
   const location = useLocation();
@@ -175,14 +175,16 @@ const SearchByCriteria = () => {
           </form>
         </div>
         {filteredScholarships.map((scholarship, index) => (
-          <Scard
-            key={index}
-            id={scholarship.id}
-            name={scholarship.name}
-            lastDate={scholarship.lastDate}
-            amount={scholarship.amount}
-            eligibility={scholarship.eligibility}
-          />
+          <SCard
+          userName={userName}
+          userEmail={userEmail}
+          key={index}
+          id={scholarship.id}
+          name={scholarship.name}
+          lastDate={scholarship.lastDate}
+          amount={scholarship.amount}
+          eligibility={scholarship.eligibility}
+        />
         ))}
 
         {/* Display loading indicator if loading */}
