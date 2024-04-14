@@ -22,7 +22,7 @@ const Filter = () => {
     }
   
     try {
-      const response = await axios.get('http://127.0.0.1:8000/scholarships/filter/', {
+      const response = await axios.get('https://gateway.pythonanywhere.com/scholarships/filter/', {
         params: {
           course: present_class,
           gender: gender,

@@ -42,7 +42,7 @@ const EditNotice = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/notices/notice/");
+      const response = await axios.get("https://gateway.pythonanywhere.com/notices/notice/");
       console.log("Response data:", response.data);
       const { notices } = response.data; // Destructure the notices array from response data
       if (Array.isArray(notices)) { // Check if notices is an array

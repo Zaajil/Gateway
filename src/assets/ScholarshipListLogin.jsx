@@ -54,7 +54,7 @@ const ScholarshipListLogin = () => {
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/scholarships/"); // Assuming this is your API endpoint
+        const response = await axios.get("https://gateway.pythonanywhere.com/scholarships/"); // Assuming this is your API endpoint
         setScholarships(response.data.scholarships); // Update to access scholarships array from the response data
       } catch (error) {
         console.error("Error fetching scholarships:", error);

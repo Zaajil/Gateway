@@ -95,7 +95,7 @@ const FavouriteScholarship = () => {
               const scholarshipIds = favoriteScholarships.map((s) => s.id);
               const scholarshipDetailsPromises = await Promise.all(
                 scholarshipIds.map((id) =>
-                  axios.get(`http://127.0.0.1:8000/scholarships/${id}/`)
+                  axios.get(`https://gateway.pythonanywhere.com/scholarships/${id}/`)
                 )
               );
               const scholarshipDetails = scholarshipDetailsPromises.map(

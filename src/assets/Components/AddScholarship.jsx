@@ -55,7 +55,7 @@ const AddScholarship = () => {
       console.log("Submitting scholarship data:", scholarshipData);
       // Send POST request to Django backend
       await axios.post(
-        "http://127.0.0.1:8000/scholarships/add/",
+        "https://gateway.pythonanywhere.com/scholarships/add/",
         scholarshipData,{ headers: { "Content-Type": "application/json" }}
       );
       // After successful submission, navigate to another page

@@ -43,7 +43,7 @@ const EditScholarship = () => {
 
   const fetchScholarships = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/scholarships/");
+      const response = await axios.get("https://gateway.pythonanywhere.com/scholarships/");
       setScholarships(response.data.scholarships);
       setLoading(false);
     } catch (error) {

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import NavbarLogin from "./NavbarLogin";
-import NoticeBoard from "./NoticeBoard";
+
 
 const Profile = () => {
   const location = useLocation();
@@ -129,8 +129,6 @@ const Profile = () => {
             </div>
           </div>
         )}
-        <NoticeBoard/>
-        {/* Other pages content */}
       </main>
     </>
   );
