@@ -54,7 +54,7 @@ const EditScholarship = () => {
   const handleScholarshipSelection = async (scholarshipId) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/scholarships/${scholarshipId}/`
+        `https://gateway.pythonanywhere.com/scholarships/${scholarshipId}/`
       );
       setSelectedScholarship(response.data);
       setFormData(response.data);
@@ -70,7 +70,7 @@ const EditScholarship = () => {
     if (window.confirm("Are you sure you want to delete this scholarship?")) {
       try {
         await axios.delete(
-          `http://127.0.0.1:8000/scholarships/${selectedScholarship.id}/delete`
+          `https://gateway.pythonanywhere.com/scholarships/${selectedScholarship.id}/delete`
         );
         alert("Scholarship deleted successfully");
         // Optionally, you can navigate the user to another page after deletion
@@ -84,7 +84,7 @@ const EditScholarship = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://127.0.0.1:8000/scholarships/${selectedScholarship.id}/`,
+        `https://gateway.pythonanywhere.com/scholarships/${selectedScholarship.id}/`,
         formData
       );
       alert("Scholarship details updated successfully");
