@@ -20,17 +20,22 @@ const Filter = () => {
       setLoading(false);
       return;
     }
-  
+
     try {
-      const response = await axios.get('https://gateway.pythonanywhere.com/scholarships/filter/', {
-        params: {
-          course: present_class,
-          gender: gender,
-          institution: institution
+      const response = await axios.get(
+        "https://gateway.pythonanywhere.com/scholarships/filter/",
+        {
+          params: {
+            course: present_class,
+            gender: gender,
+            institution: institution,
+          },
         }
-      });
+      );
       setLoading(false);
-      navigate('/filter-scholarship', { state: { filteredScholarships: response.data } });
+      navigate("/filter-scholarship", {
+        state: { filteredScholarships: response.data },
+      });
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -38,22 +43,27 @@ const Filter = () => {
   };
 
   return (
-    <div className="flex justify-evenly">
-      <img
-        src="bgimage.png"
-        alt=""
-        className="w-[472px] object-cover rounded-[20px]"
-      />
-      <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col lg:flex-row lg:justify-evenly">
+      <div className="hidden lg:block">
+        <img
+          src="bgimage.png"
+          alt=""
+          className="w-[472px] object-cover rounded-[20px] mb-5"
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center lg:w-[50%]">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-[44px] pt-83">Find scholarships</h1>
-          <p className="pl-5 w-3/5 text-pretty">
+          <h1 className="text-[44px] pt-8 lg:pt-0">Find scholarships</h1>
+          <p className="pl-5 w-3/5 text-pretty text-center lg:text-left">
             Get a collection of suitable scholarships from our expansive
             scholarship database.
-          </p>
+          </p><br></br>
         </div>
 
-        <form className="max-w-sm mx-auto mt-10" onSubmit={handleSubmit}>
+        <form
+          className="max-w-sm mx-auto mt-10 lg:mt-0"
+          onSubmit={handleSubmit}
+        >
           <div className="mb-5">
             <label
               htmlFor="className"
@@ -63,7 +73,7 @@ const Filter = () => {
             </label>
             <select
               id="className"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-light gray-700 border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-light gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
               value={present_class}
               onChange={(e) => setPresentClass(e.target.value)}
             >
