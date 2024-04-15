@@ -3,7 +3,10 @@ const Hero = () => {
   return (
     <div className=" mb-2 mt-16 pt-1 relative h-screen">
       <div className="absolute inset-0 bg-gradient-to-b opacity-100"></div>
-      <div className="absolute inset-0 bg-[url('./herobg.png')] bg-cover bg-center opacity-50"></div>
+      <div className="absolute inset-0 bg-cover bg-center opacity-50">
+  <img src="./herobg.png" alt="Hero Background" className="w-full h-full object-cover" />
+</div>
+
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-black">
         <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4">
           Gateway To Scholarships
