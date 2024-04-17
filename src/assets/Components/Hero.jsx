@@ -44,14 +44,10 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative h-screen">
-      <div className="absolute inset-0 "></div>
-      <div className="absolute inset-0 bg-cover bg-center opacity-20">
-        <img
-          src="./bg.jpg"
-          alt="Hero Background"
-          className="w-full h-full object-cover"
-        />
+    <div className="relative min-h-screen  ">
+      <div className=" "></div>
+      <div className="bg-cover bg-center opacity-20">
+        <img src="./bg.jpg" alt="Hero Background" className="object-cover" />
       </div>
       <div className="absolute ml-10 mr-10 top-28 flex flex-col justify-center z-10 text-left text-black">
         <h1 className="text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6">
