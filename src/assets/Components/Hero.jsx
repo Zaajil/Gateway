@@ -145,7 +145,7 @@ const Hero = () => {
       </div>
       <div className="hidden md:block lg:block absolute top-24 right-48">
         <img
-          src="img.png"
+          src="./img.png"
           alt=""
           className="w-[272px] h-[472px] object-cover mb-5"
         />
