@@ -20,22 +20,17 @@ const Filter = () => {
       setLoading(false);
       return;
     }
-
+  
     try {
-      const response = await axios.get(
-        "https://gateway.pythonanywhere.com/scholarships/filter/",
-        {
-          params: {
-            course: present_class,
-            gender: gender,
-            institution: institution,
-          },
+      const response = await axios.get('https://gateway.pythonanywhere.com/scholarships/filter/', {
+        params: {
+          course: present_class,
+          gender: gender,
+          institution: institution
         }
-      );
-      setLoading(false);
-      navigate("/filter-scholarship", {
-        state: { filteredScholarships: response.data },
       });
+      setLoading(false);
+      navigate('/filter-scholarship', { state: { filteredScholarships: response.data } });
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -53,17 +48,14 @@ const Filter = () => {
       </div>
       <div className="flex flex-col items-center justify-center lg:w-[50%]">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="text-[44px] pt-8 lg:pt-0">Find scholarships</h1>
+          <h1 className="text-[44px] pt-8 lg:pt-0 text-center lg:text-left">Find scholarships</h1>
           <p className="pl-5 w-3/5 text-pretty text-center lg:text-left">
             Get a collection of suitable scholarships from our expansive
             scholarship database.
-          </p><br></br>
+          </p>
         </div>
 
-        <form
-          className="max-w-sm mx-auto mt-10 lg:mt-0"
-          onSubmit={handleSubmit}
-        >
+        <form className="max-w-sm mx-auto mt-10 lg:mt-0" onSubmit={handleSubmit}>
           <div className="mb-5">
             <label
               htmlFor="className"
